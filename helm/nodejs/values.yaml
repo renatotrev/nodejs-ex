@@ -15,6 +15,6 @@ application_domain:
 # GitHub Webhook Secret: Github trigger secret.  A difficult to guess string encoded as part of the webhook URL.  Not encrypted.
 github_webhook_secret: 123456789secret987654321
 # Generic Webhook Secret: A secret string used to configure the Generic webhook.
-generic_webhook_secret:
+generic_webhook_secret: 123456789secret987654321
 # Custom NPM Mirror URL: The custom NPM mirror URL
 npm_mirror:

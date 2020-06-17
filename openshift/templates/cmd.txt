@@ -1,0 +1,3 @@
+oc new-app -f openshift/templates/nodejs.json
+oc new-app -f openshift/templates/nodejs-mongodb.json
+oc new-app -f openshift/templates/nodejs-mongodb-persistent.json

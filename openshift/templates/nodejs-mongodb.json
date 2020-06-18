@@ -17,8 +17,8 @@
   },
   "message": "The following service(s) have been created in your project: ${NAME}, ${DATABASE_SERVICE_NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/renatotrev/nodejs-ex/blob/master/README.md.",
   "labels": {
-      "template": "nodejs-mongodb-example",
-      "app": "nodejs-mongodb-example"
+    "template": "nodejs-mongodb-example",
+    "app": "nodejs-mongodb-example"
   },
   "objects": [
     {
@@ -30,7 +30,7 @@
       "stringData": {
         "database-user": "${DATABASE_USER}",
         "database-password": "${DATABASE_PASSWORD}",
-        "database-admin-password" : "${DATABASE_ADMIN_PASSWORD}"
+        "database-admin-password": "${DATABASE_ADMIN_PASSWORD}"
       }
     },
     {
@@ -207,18 +207,18 @@
                   {
                     "name": "MONGODB_USER",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-user"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-user"
                       }
                     }
                   },
                   {
                     "name": "MONGODB_PASSWORD",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-password"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-password"
                       }
                     }
                   },
@@ -229,9 +229,9 @@
                   {
                     "name": "MONGODB_ADMIN_PASSWORD",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-admin-password"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-admin-password"
                       }
                     }
                   }
@@ -343,18 +343,18 @@
                   {
                     "name": "MONGODB_USER",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-user"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-user"
                       }
                     }
                   },
                   {
                     "name": "MONGODB_PASSWORD",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-password"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-password"
                       }
                     }
                   },
@@ -365,9 +365,9 @@
                   {
                     "name": "MONGODB_ADMIN_PASSWORD",
                     "valueFrom": {
-                      "secretKeyRef" : {
-                        "name" : "${NAME}",
-                        "key" : "database-admin-password"
+                      "secretKeyRef": {
+                        "name": "${NAME}",
+                        "key": "database-admin-password"
                       }
                     }
                   }
@@ -414,6 +414,65 @@
             ]
           }
         }
+      }
+    },
+    {
+      "kind": "HorizontalPodAutoscaler",
+      "apiVersion": "autoscaling/v2beta1",
+      "metadata": {
+        "name": "${NAME}-cpu",
+        "annotations": {
+          "description": "Defines autoscaling for cpu"
+        }
+      },
+      "spec": {
+        "scaleTargetRef": {
+          "kind": "DeploymentConfig",
+          "name": "${NAME}",
+          "apiVersion": "apps.openshift.io/v1"
+        },
+        "minReplicas": 1,
+        "maxReplicas": 4,
+        "metrics": [
+          {
+            "type": "Resource",
+            "resource": {
+              "name": "cpu",
+              "targetAverageValue": "300m"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "autoscaling/v2beta2",
+      "kind": "HorizontalPodAutoscaler",
+      "metadata": {
+        "name": "${NAME}-memory",
+        "annotations": {
+          "description": "Defines autoscaling for memory"
+        }
+      },
+      "spec": {
+        "scaleTargetRef": {
+          "kind": "DeploymentConfig",
+          "name": "${NAME}",
+          "apiVersion": "apps.openshift.io/v1"
+        },
+        "minReplicas": 1,
+        "maxReplicas": 4,
+        "metrics": [
+          {
+            "type": "Resource",
+            "resource": {
+              "name": "memory",
+              "target": {
+                "type": "AverageValue",
+                "averageValue": "70Mi"
+              }
+            }
+          }
+        ]
       }
     }
   ],

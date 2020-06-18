@@ -1,3 +1,20 @@
+Enabling on local cluster
+
+Monitoring
+oc get clusterversion version -ojsonpath='{range .spec.overrides[*]}{.name}{"\n"}{end}' | nl -v 0
+oc patch clusterversion/version --type='json' -p '[{"op":"remove", "path":"/spec/overrides/0"}]' -oyaml
+
+Auto Scaler
+oc get clusterversion version -ojsonpath='{range .spec.overrides[*]}{.name}{"\n"}{end}' | nl -v 0
+oc patch clusterversion/version --type='json' -p '[{"op":"remove", "path":"/spec/overrides/3"}]' -oyaml
+
 oc new-app -f openshift/templates/nodejs.json
 oc new-app -f openshift/templates/nodejs-mongodb.json
-oc new-app -f openshift/templates/nodejs-mongodb-persistent.json
+
+
+Add Auto Scaler
+oc describe PodMetrics nodejs-mongodb-example
+oc autoscale dc/nodejs-mongodb-example  --min 1   --max 3   --cpu-percent=10
+oc get hpa
+
+
